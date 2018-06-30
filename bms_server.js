@@ -29,7 +29,7 @@ app.use(function(req, res, next) {
     mongoose.connection.once('open', function(){
         console.log("MongoDb connected successfully");
     });
-	var connectionInstance  = mongoose.createConnection('mongodb://vidhu.pawar:vidhu1991@ds121861.mlab.com:21861/bms'); //without db authentication
+	var connectionInstance  = mongoose.createConnection('mongodb://vidhu123:vidhu123@ds121861.mlab.com:21861/bms'); //without db authentication
 
 	//error connecting to db
 	connectionInstance.on('error', function (err) {
