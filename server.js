@@ -1,32 +1,13 @@
-
-
-var express = require('express'); //required express module
-var app =  express();
+var express = require('express');
+var app = express();
 
 app.use(function(req, res, next) { 
     res.header("Access-Control-Allow-Origin", "*"); 
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); 
     next(); 
 });
-
-
-//Server code goes here  
-    http = require('http');
-
-    http.createServer(app).listen(4000, function(){
-        console.log("api listening to ", 4000);
-    });
-
-//Ends
-
-
-//code to create connection with db and perfromin CRUD operations
-
-    var mongoose = require('mongoose'); // requiring mongoose module
-    // // creating connection to mongoose
-
-    //one time listener for the event
-    mongoose.connection.once('open', function(){
+var mongoose = require('mongoose');
+  mongoose.connection.once('open', function(){
         console.log("MongoDb connected successfully");
     });
 	var connectionInstance  = mongoose.createConnection('mongodb://vidhu123:vidhu123@ds121861.mlab.com:21861/bms'); //without db authentication
@@ -41,8 +22,7 @@ app.use(function(req, res, next) {
 	connectionInstance.once('open', function() {
 		console.log("MongoDb connected successfully");
 	});
-    //defining schema
-    var cast_schema = {
+	    var cast_schema = {
         name: {type: String},
         as: {type: String}
     };
@@ -69,11 +49,23 @@ app.use(function(req, res, next) {
     var movies_schema = new mongoose.Schema(access_schema);
     var movie_model = connectionInstance.model('movies', movies_schema);
 
-//End mongoose code
 
+// set the port of our application
+// process.env.PORT lets the port be set by Heroku
+var port = process.env.PORT || 8080;
 
+// set the view engine to ejs
+app.set('view engine', 'ejs');
 
-//Here goes the route code
+// make express look in the public directory for assets (css/js/img)
+app.use(express.static(__dirname + '/public'));
+
+// set the home page route
+app.get('/', function(req, res) {
+
+	// ejs render automatically looks in the views folder
+	res.render('index');
+});
 
     app.get('/getData/:limit', function(req, res){
         movie_model.find({},{},{ limit : parseInt(req.params.limit, 10)}, function(err, movie_docs){
@@ -111,4 +103,8 @@ app.use(function(req, res, next) {
         });
     });
 
-//Ending
+app.listen(port, function() {
+	console.log('Our app is running on http://localhost:' + port);
+});
+
+
