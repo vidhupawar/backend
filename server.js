@@ -81,7 +81,7 @@ app.get('/', function(req, res) {
     });
 
     app.get('/getSingleMovie/:name', function(req, res){
-        movie_model.findOne({name : req.params.name}, function(err, movie_docs){
+        movie_model.findOne({sr_nm : req.params.name}, function(err, movie_docs){
             if(err){
                 console.log('\nerr:',err);
                 res.status(404).json({status:'failure', result:'internal server error'});
